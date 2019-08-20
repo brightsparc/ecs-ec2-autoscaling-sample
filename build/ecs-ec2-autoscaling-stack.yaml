@@ -563,8 +563,11 @@ Resources:
       AlarmActions:
         - Ref: asgcpureservationscalingLowerPolicy764943A5
       AlarmDescription: Lower threshold scaling alarm
+      Dimensions:
+        - Name: ClusterName
+          Value: ecs-ec2-autoscaling
       MetricName: CPUReservation
-      Namespace: ecs-ec2-autoscaling
+      Namespace: AWS/ECS
       Period: 60
       Statistic: Average
     Metadata:
@@ -594,8 +597,11 @@ Resources:
       AlarmActions:
         - Ref: asgcpureservationscalingUpperPolicyD0E9783D
       AlarmDescription: Upper threshold scaling alarm
+      Dimensions:
+        - Name: ClusterName
+          Value: ecs-ec2-autoscaling
       MetricName: CPUReservation
-      Namespace: ecs-ec2-autoscaling
+      Namespace: AWS/ECS
       Period: 60
       Statistic: Average
     Metadata:
