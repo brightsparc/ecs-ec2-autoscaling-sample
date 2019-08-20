@@ -1,5 +1,5 @@
 config:
-  target: "{{ $processEnvironment.ALB_DNS }}"
+  target: "http://{{ $processEnvironment.ALB_DNS }}"
   phases:
     - duration: 1200
       arrivalRate: 20
