@@ -1,6 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import { Vpc, InstanceType } from '@aws-cdk/aws-ec2';
-import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
+import { AutoScalingGroup, AdjustmentType } from '@aws-cdk/aws-autoscaling';
+import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import * as elb from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as ecs from '@aws-cdk/aws-ecs';
 
@@ -47,9 +48,34 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
       maxCapacity: 20,
       cooldown: cdk.Duration.seconds(60),
     });
-    asg.scaleOnCpuUtilization('cpu-instance-scaling', { 
-      targetUtilizationPercent: 60,
-    })
+
+    // asg.scaleOnCpuUtilization('cpu-instance-scaling', { 
+    //   targetUtilizationPercent: 60,
+    // })
+
+    /*    
+      Scaling        -1          (no change)          +1       +3
+                  │        │                       │        │        │
+                  ├────────┼───────────────────────┼────────┼────────┤
+                  │        │                       │        │        │
+      Reservation 0%      10%                     50%       70%     100%
+    */
+   const workerUtilizationMetric = new cloudwatch.Metric({
+        namespace: this.STACK_NAME,
+        metricName: 'CPUReservation'
+    });
+    asg.scaleOnMetric('cpu-reservation-scaling', {
+      metric: workerUtilizationMetric,
+      scalingSteps: [
+        { upper: 10, change: -1 },
+        { lower: 50, change: +1 },
+        { lower: 70, change: +3 },
+      ],
+      // Change this to AdjustmentType.PERCENT_CHANGE_IN_CAPACITY to interpret the
+      // 'change' numbers before as percentages instead of capacity counts.
+      adjustmentType: AdjustmentType.CHANGE_IN_CAPACITY,
+    });
+
     
     cluster.addAutoScalingGroup(asg);
 
