@@ -61,8 +61,10 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
       Reservation 0%      10%                     50%       70%     100%
     */
    const workerUtilizationMetric = new cloudwatch.Metric({
-        namespace: this.STACK_NAME,
-        metricName: 'CPUReservation'
+        namespace: 'AWS/ECS',
+        metricName: 'CPUReservation',
+        dimensions: { ClusterName: this.STACK_NAME },
+        period: cdk.Duration.minutes(1)
     });
     asg.scaleOnMetric('cpu-reservation-scaling', {
       metric: workerUtilizationMetric,
