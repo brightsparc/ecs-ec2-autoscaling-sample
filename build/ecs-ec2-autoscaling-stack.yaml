@@ -1022,6 +1022,43 @@ Resources:
         TargetValue: 50
     Metadata:
       aws:cdk:path: EcsEc2AutoscalingStack/service-1/TaskCount/Target/service-1-cpu-task-scaling/Resource
+  service1TaskCountTargetservice1requesttaskscaling88E26539:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: EcsEc2AutoscalingStackservice1TaskCountTargetservice1requesttaskscaling9FE2F558
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: service1TaskCountTarget3DEE703A
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ALBRequestCountPerTarget
+          ResourceLabel:
+            Fn::Join:
+              - ""
+              - - Fn::Select:
+                    - 1
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::Select:
+                    - 2
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::Select:
+                    - 3
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::GetAtt:
+                    - alblistenerwebservice1Group4A86C90B
+                    - TargetGroupFullName
+        TargetValue: 20
+    Metadata:
+      aws:cdk:path: EcsEc2AutoscalingStack/service-1/TaskCount/Target/service-1-request-task-scaling/Resource
   service2taskdefinitionTaskRole65B3BAF2:
     Type: AWS::IAM::Role
     Properties:
@@ -1184,6 +1221,43 @@ Resources:
         TargetValue: 50
     Metadata:
       aws:cdk:path: EcsEc2AutoscalingStack/service-2/TaskCount/Target/service-2-cpu-task-scaling/Resource
+  service2TaskCountTargetservice2requesttaskscaling09C809C2:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: EcsEc2AutoscalingStackservice2TaskCountTargetservice2requesttaskscaling0F998CD8
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: service2TaskCountTarget3A8B455C
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ALBRequestCountPerTarget
+          ResourceLabel:
+            Fn::Join:
+              - ""
+              - - Fn::Select:
+                    - 1
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::Select:
+                    - 2
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::Select:
+                    - 3
+                    - Fn::Split:
+                        - /
+                        - Ref: alblistenerC508FBF5
+                - /
+                - Fn::GetAtt:
+                    - alblistenerwebservice2GroupBCE0FAEA
+                    - TargetGroupFullName
+        TargetValue: 20
+    Metadata:
+      aws:cdk:path: EcsEc2AutoscalingStack/service-2/TaskCount/Target/service-2-request-task-scaling/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:

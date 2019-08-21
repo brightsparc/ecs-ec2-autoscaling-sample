@@ -81,26 +81,26 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
     
     cluster.addAutoScalingGroup(asg);
 
-    const service1 = this.createService(cluster, 'service-1')
-    listener.addTargets('web-service-1', { 
+    const tg1 = listener.addTargets('web-service-1', { 
       priority: 1,
       hostHeader: 'web-1.com',
       port: 80 ,
       healthCheck: { path: '/api/v2/health' },
-      targets: [service1],
     });
+    const service1 = this.createService(cluster, tg1, 'service-1')
+    tg1.addTarget(service1)
 
-    const service2 = this.createService(cluster, 'service-2')
-    listener.addTargets('web-service-2', { 
+    const tg2 = listener.addTargets('web-service-2', { 
       priority: 2,
       hostHeader: 'web-2.com',
       port: 80 ,
       healthCheck: { path: '/api/v2/health' },
-      targets: [service2],
     });
+    const service2 = this.createService(cluster, tg2, 'service-2')
+    tg2.addTarget(service2)
   }
 
-  private createService(cluster: ecs.ICluster, id: string): ecs.BaseService {
+  private createService(cluster: ecs.ICluster, tg: elb.ApplicationTargetGroup, id: string): ecs.BaseService {
     const taskDefinition = new ecs.Ec2TaskDefinition(this, `${id}-task-definition`);
 
     const container = taskDefinition.addContainer('web', {
@@ -127,6 +127,10 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
       targetUtilizationPercent: 50,
       scaleInCooldown: cdk.Duration.seconds(30),
       scaleOutCooldown: cdk.Duration.seconds(30),
+    });
+    scaling.scaleOnRequestCount(`${id}-request-task-scaling`, {
+      targetGroup: tg,
+      requestsPerTarget: 20,
     });
 
     return service;
