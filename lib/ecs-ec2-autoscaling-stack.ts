@@ -45,7 +45,7 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
       instanceType: new InstanceType('t2.large'),
       machineImage: ecs.EcsOptimizedImage.amazonLinux(),
       minCapacity: 3,
-      maxCapacity: 20,
+      maxCapacity: 10,
       cooldown: cdk.Duration.seconds(60),
     });
 
@@ -121,7 +121,7 @@ export class EcsEc2AutoscalingStack extends cdk.Stack {
     
     const scaling = service.autoScaleTaskCount({ 
       minCapacity: 2,
-      maxCapacity: 1000,
+      maxCapacity: 10,
     });
     scaling.scaleOnCpuUtilization(`${id}-cpu-task-scaling`, {
       targetUtilizationPercent: 50,

@@ -523,7 +523,7 @@ Resources:
   asgASG4D014670:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      MaxSize: "20"
+      MaxSize: "10"
       MinSize: "3"
       Cooldown: "60"
       DesiredCapacity: "3"
@@ -981,7 +981,7 @@ Resources:
   service1TaskCountTarget3DEE703A:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MaxCapacity: 1000
+      MaxCapacity: 10
       MinCapacity: 2
       ResourceId:
         Fn::Join:
@@ -1180,7 +1180,7 @@ Resources:
   service2TaskCountTarget3A8B455C:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MaxCapacity: 1000
+      MaxCapacity: 10
       MinCapacity: 2
       ResourceId:
         Fn::Join:
